@@ -1,0 +1,17 @@
+Enunciado
+
+Este exercícios de programação consiste em implementar um programa que receba como argumentos de linha de comando o nome de um arquivo (file-name.g) e um valor inteiro no. O programa deve então ler do arquivo (file-name.g) a definição de uma gramática e produzir todas as palavras do tamanho indicados no que possam ser geradas pela gramática lida.
+Formato de Entrada
+
+O formato do arquivo de definição da gramática seguirá o padrão abaixo:
+
+V = A B C D ...
+T = a b c d ...
+S = A
+α1 -> β1
+α2 -> β2
+α3 -> β3
+...
+
+O caracter $ deve ser interpretada como "cadeia vazia". Por exemplo, a regra "A->$" (sem as aspas) deve ser interpretada como "A gera cadeia vazia".
+Execução do Trabalho
