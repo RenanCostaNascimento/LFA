@@ -1,0 +1,4 @@
+V = A B C D
+T = a b c d
+S = A
+a -> b
