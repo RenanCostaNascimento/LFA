@@ -4,13 +4,10 @@
  * and open the template in the editor.
  */
 
-package main;
-
-import br.edu.ifes.lfa.ciu.cci.ControleInterface;
+package GramaticaDerivacoes;
 
 /**
  *
- * @author Thanner Soares Silva <thannersoares@gmail.com>
  */
 public class GramaticaDerivacoes {
 
@@ -18,8 +15,11 @@ public class GramaticaDerivacoes {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ControleInterface ci = new ControleInterface();
-        ci.controlaChamada();
+        
+        Derivacoes derivacoes = new Derivacoes();
+        derivacoes.carregarGramatica("file-name.txt");
+        derivacoes.escreverGramatica();
+        
     }
 
 }

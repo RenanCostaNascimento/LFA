@@ -1,4 +1,16 @@
-V = A B C D
+V = X A B C D
 T = a b c d
-S = A
-a -> b
+S = X
+X -> ABCD
+A -> Ab
+A -> b
+A -> $
+B -> Bc
+B -> c
+B -> $
+C -> Cd
+C -> d
+C -> $
+D -> Da
+D -> a
+D -> $
