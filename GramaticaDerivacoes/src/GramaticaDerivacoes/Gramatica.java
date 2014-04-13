@@ -7,7 +7,6 @@
 package GramaticaDerivacoes;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,29 +15,39 @@ import java.util.List;
  */
 public class Gramatica {
     
-    private String V;
-    private String T;
+    private List<String> V;
+    private List<String> T;
     private String S;
-    private List<HashMap<String, String>> regrasProducao;
+    private List<RegraProducao> regrasProducao;
 
     public Gramatica(){
-        regrasProducao = new ArrayList<HashMap<String, String>>();
+        V = new ArrayList<>();
+        T = new ArrayList<>();
+        regrasProducao = new ArrayList<>();
     }
-    
-    public String getV() {
+
+    public List<String> getV() {
         return V;
     }
 
-    public void setV(String V) {
+    public void setV(List<String> V) {
         this.V = V;
     }
+    
+    public void addV(String v){
+        this.V.add(v);
+    }
 
-    public String getT() {
+    public List<String> getT() {
         return T;
     }
 
-    public void setT(String T) {
+    public void setT(List<String> T) {
         this.T = T;
+    }
+    
+    public void addT(String t){
+        this.T.add(t);
     }
 
     public String getS() {
@@ -49,15 +58,11 @@ public class Gramatica {
         this.S = S;
     }
 
-    public List<HashMap<String, String>> getRegrasProducao() {
+    public List<RegraProducao> getRegrasProducao() {
         return regrasProducao;
     }
 
-    public void setRegrasProducao(List<HashMap<String, String>> regrasProducao) {
-        this.regrasProducao = regrasProducao;
-    }
-
-    public void addRegraProducao(HashMap<String, String> regra){
-        regrasProducao.add(regra);
+    public void addRegraProducao(RegraProducao regraProducao){
+        this.regrasProducao.add(regraProducao);
     }
 }

@@ -1,16 +1,16 @@
-V = X A B C D
-T = a b c d
-S = X
-X -> ABCD
-A -> Ab
-A -> b
-A -> $
-B -> Bc
-B -> c
-B -> $
-C -> Cd
-C -> d
-C -> $
-D -> Da
-D -> a
-D -> $
+V = P X Y A B F
+T = a b
+S = P
+P -> XY
+X -> XaA
+X -> XbB
+X -> F
+Aa -> aA
+Ab -> bA
+AY -> Ya
+Ba -> aB
+Bb -> bB
+BY -> Yb
+Fa -> aF
+Fb -> bF
+FY -> $
