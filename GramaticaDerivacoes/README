@@ -15,3 +15,8 @@ S = A
 
 O caracter $ deve ser interpretada como "cadeia vazia". Por exemplo, a regra "A->$" (sem as aspas) deve ser interpretada como "A gera cadeia vazia".
 Execução do Trabalho
+
+COMO RODAR O PROGRAMA
+- Extrair o projeto
+- Importar o projeto no Netbeans
+- Rodar o programa
