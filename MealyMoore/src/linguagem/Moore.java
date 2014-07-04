@@ -33,10 +33,34 @@ public class Moore extends Linguagem {
 //    public String toString() {
 //        return super.toString() + "\nFunção de saída:\n" + simboloGerado;
 //    }
+    
+    public String gerarArquivo(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("( moore\n");
+        builder.append(super.gerarArquivo());
+        for(Transicao transicao : funcaoTransicao){
+            builder.append("( " + transicao.getEstadoOrigem() + " " + transicao.getEstadoDestino() + " " + transicao.getSimboloTransicao() + " ) ");
+        }
+        builder.append("\n( out-fn\n");
+        for(Transicao transicao : funcaoTransicao){
+            if(transicao.getSimboloTransicao().equals("$")){
+                builder.append("( " + transicao.getEstadoOrigem() + " ( ) )");
+            }else{
+                builder.append("( " + transicao.getEstadoOrigem() + " " + transicao.getSimboloGerado() + " ) ");
+            }
+        }
+        builder.append(") )");
+        return builder.toString();
+    }
 
-    public Mealy converteMealy() {
-        System.out.println("Ainda não implementado");
-        return null;
+    @Override
+    public Linguagem toMealy() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Linguagem toMoore() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

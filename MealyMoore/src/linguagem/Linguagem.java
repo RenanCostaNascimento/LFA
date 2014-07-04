@@ -20,6 +20,7 @@ public abstract class Linguagem {
     protected String estadoInicial;
     protected List<String> conjuntoEstadosFinais;
     protected List<Transicao> funcaoTransicao;
+    protected List<FuncaoSaida> funcaoSaidas;
 
     public Linguagem() {
         this.alfabetoEntrada = new ArrayList<>();
@@ -27,10 +28,31 @@ public abstract class Linguagem {
         this.alfabetoSaida = new ArrayList<>();
         this.conjuntoEstados = new ArrayList<>();
         this.conjuntoEstadosFinais = new ArrayList<>();
+        this.funcaoSaidas = new ArrayList<>();
     }
 
+    public List<Transicao> getFuncaoTransicao() {
+        return funcaoTransicao;
+    }
+
+    public void setFuncaoTransicao(List<Transicao> funcaoTransicao) {
+        this.funcaoTransicao = funcaoTransicao;
+    }
+
+    public List<FuncaoSaida> getFuncaoSaidas() {
+        return funcaoSaidas;
+    }
+
+    public void setFuncaoSaidas(List<FuncaoSaida> funcaoSaidas) {
+        this.funcaoSaidas = funcaoSaidas;
+    }
+    
     public void addAlfabetoEntrada(String alfabetoEntrada) {
         this.alfabetoEntrada.add(alfabetoEntrada);
+    }
+    
+    public void addFuncaoSaida(FuncaoSaida funcaoSaida) {
+        this.funcaoSaidas.add(funcaoSaida);
     }
 
     public void addAlfabetoSaida(String alfabetoSaida) {
@@ -123,5 +145,32 @@ public abstract class Linguagem {
     public String[] String2VetorString(String string) {
         String[] novaString = string.substring(1, string.length() - 1).split(", ");
         return novaString;
+    }
+    
+    public abstract Linguagem toMealy();
+    
+    public abstract Linguagem  toMoore();
+    
+    public String gerarArquivo(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("( symbols-in ");
+        for(String entrada : alfabetoEntrada){
+            builder.append(entrada + " ");
+        }
+        builder.append(")\n( symbols-out ");
+        for(String saida : alfabetoSaida){
+            builder.append(saida + " ");
+        }
+        builder.append(")\n( states ");
+        for(String estado : conjuntoEstados){
+            builder.append(estado + " ");
+        }
+        builder.append(")\n( start " + estadoInicial + ")\n");
+        builder.append("( finals ");
+        for(String estado : conjuntoEstadosFinais){
+            builder.append(estado + " ");
+        }
+        builder.append(")\n( trans\n");
+        return builder.toString();
     }
 }

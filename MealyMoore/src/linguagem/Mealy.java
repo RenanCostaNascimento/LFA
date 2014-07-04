@@ -5,40 +5,35 @@
  */
 package linguagem;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author T
  */
 public class Mealy extends Linguagem {
 
-//    public Moore converteMoore() {
-//        Moore moore = new Moore();
-//        moore.setAlfabetoEntrada(alfabetoEntrada);
-//        moore.setConjuntoEstados(conjuntoEstados);
-//        for (ArrayList<String> transicao : funcaoTransicao) {
-//            String[] vetorTransicao = String2VetorString(transicao.get(0));
-//            ArrayList<String> transicaoMoore = new ArrayList<>();
-//            for (int i = 0; i < vetorTransicao.length - 1; i++) {
-//                transicaoMoore.add(vetorTransicao[i]);
-//            }
-//            moore.addFuncaoTransicao(transicaoMoore);
-//        }
-//        for (ArrayList<String> transicao : funcaoTransicao) {
-//            String[] vetorTransicao = String2VetorString(transicao.get(0));
-//            ArrayList<String> saidaMoore = new ArrayList<>();
-//            saidaMoore.add(vetorTransicao[0]);
-//            for (int i = 3; i < vetorTransicao.length; i++) {
-//                saidaMoore.add(vetorTransicao[i]);
-//            }
-//            moore.addFuncaoSaida(saidaMoore);
-//        }
-//        moore.setEstadoInicial(estadoInicial);
-//        moore.setConjuntoEstadosFinais(conjuntoEstadosFinais);
-//        moore.setAlfabetoSaida(alfabetoSaida);
-//        return moore;
-//    }
-    
+    @Override
+    public Linguagem toMealy() {
+        System.out.println("Já sou Mealy!");
+        return null;
+    }
+
+    @Override
+    public Linguagem toMoore() {
+        Moore moore = new Moore();
+        moore.setAlfabetoEntrada(alfabetoEntrada);
+        moore.setAlfabetoSaida(alfabetoSaida);
+        moore.setConjuntoEstados(conjuntoEstados);
+        moore.setEstadoInicial(estadoInicial);
+        moore.setConjuntoEstadosFinais(conjuntoEstadosFinais);
+        for (Transicao transicao : funcaoTransicao) {
+            Transicao transicaoMoore = new Transicao(transicao.getEstadoOrigem(), transicao.getSimboloTransicao(), transicao.getEstadoDestino());
+            moore.addFuncaoTransicao(transicao);
+            FuncaoSaida funcaoSaida = new FuncaoSaida(transicao.getEstadoOrigem(), transicao.getSimboloGerado());
+            moore.addFuncaoSaida(funcaoSaida);            
+        }
+        
+        return moore;
+    }
+
 
 }

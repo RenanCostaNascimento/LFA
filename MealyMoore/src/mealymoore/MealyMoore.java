@@ -8,11 +8,14 @@ package mealymoore;
 import edu.ifes.sexpr.Lexer;
 import edu.ifes.sexpr.Parser;
 import edu.ifes.sexpr.Symbol;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import linguagem.FuncaoSaida;
 import linguagem.Linguagem;
 import linguagem.Mealy;
 import linguagem.Moore;
@@ -24,16 +27,25 @@ import linguagem.Transicao;
  */
 public class MealyMoore {
     
-    private static final String MOORE_1 = "moore-entrada-1.txt";
-    private static final String MOORE_2 = "moore-entrada-2.txt";
-    private static final String MOORE_3 = "moore-entrada-3.txt";
-    private static final String MEALY_1 = "mealy-entrada-1.txt";
-    private static final String MEALY_2 = "mealy-entrada-2.txt";
-    private static final String MEALY_3 = "mealy-entrada-3.txt";
+    // Possiveis arquivos de entrada.
+    private static final String MOORE_ENTRADA_1 = "moore-entrada-1.txt";
+    private static final String MOORE_ENTRADA_2 = "moore-entrada-2.txt";
+    private static final String MOORE_ENTRADA_3 = "moore-entrada-3.txt";
+    private static final String MEALY_ENTRADA_1 = "mealy-entrada-1.txt";
+    private static final String MEALY_ENTRADA_2 = "mealy-entrada-2.txt";
+    private static final String MEALY_ENTRADA_3 = "mealy-entrada-3.txt";
+    
+    // Possiveis arquivos de saida.
+    private static final String MOORE_SAIDA_1 = "moore-saida-1.txt";
+    private static final String MOORE_SAIDA_2 = "moore-saida-2.txt";
+    private static final String MOORE_SAIDA_3 = "moore-saida-3.txt";
+    private static final String MEALY_SAIDA_1 = "mealy-saida-1.txt";
+    private static final String MEALY_SAIDA_2 = "mealy-saida-2.txt";
+    private static final String MEALY_SAIDA_3 = "mealy-saida-3.txt";
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
         assert (args.length == 1);
-        FileReader rd = new FileReader(MOORE_1);
+        FileReader rd = new FileReader(MEALY_ENTRADA_1);
 
         Lexer lex = new Lexer(rd);
         Parser parser = new Parser(lex);
@@ -75,13 +87,13 @@ public class MealyMoore {
                         linguagem.addAlfabetoSaida(l.get(j).toString());
                     }
                 } else if (id.name.equals("states")) {
-                    for(int j = 1; j < l.size(); j++){
+                    for (int j = 1; j < l.size(); j++) {
                         linguagem.addConjuntoEstados(l.get(j).toString());
                     }
                 } else if (id.name.equals("start")) {
                     linguagem.setEstadoInicial(l.get(1).toString());
                 } else if (id.name.equals("finals")) {
-                    for(int j = 1; j < l.size(); j++){
+                    for (int j = 1; j < l.size(); j++) {
                         linguagem.addConjuntoEstadosFinais(l.get(j).toString());
                     }
                 } else if (id.name.equals("trans")) {
@@ -93,22 +105,29 @@ public class MealyMoore {
                         String estadoDestino = funcaoTransicao.substring(5, 7);
                         String simboloTransicao = funcaoTransicao.substring(9, 10);
                         Transicao transicao = new Transicao(estadoOrigem, simboloTransicao, estadoDestino);
-                        if(idMaq.name.equals("mealy")){
+                        if (idMaq.name.equals("mealy")) {
                             String simboloGerado = funcaoTransicao.substring(12, 13);
                             transicao.setSimboloGerado(simboloGerado);
                         }
                         linguagem.addFuncaoTransicao(transicao);
-                        
-                    }                   
+
+                    }
                 } else if (id.name.equals("out-fn")) {
                     System.out.println("Função de saída:");
                     for (int j = 1; j < l.size(); j += 1) {
                         x = l.get(j);
                         ArrayList<String> array = object2array(x);
                         System.out.println(array.get(0));
-                        String funcaoSaida = array.get(0);
-                        linguagem = new Moore();
-
+                        String funcaoSaidaStr = array.get(0);
+                        String estado = funcaoSaidaStr.substring(2, 4);
+                        String simboloGerado = funcaoSaidaStr.substring(5, 6);
+                        FuncaoSaida funcaoSaida;
+                        if (simboloGerado.equals("[")) {
+                            funcaoSaida = new FuncaoSaida(estado, "$");
+                        } else {
+                            funcaoSaida = new FuncaoSaida(estado, simboloGerado);
+                        }
+                        linguagem.addFuncaoSaida(funcaoSaida);
                     }
                 } else {
                     String err = String.format("Isso não deveria estar aqui: %s", id);
@@ -117,23 +136,19 @@ public class MealyMoore {
             }
         }
 
-//        // Escolho a máquina, realizo a conversão
-//        Linguagem linguagemConvertida = null;
-//        if (idMaq.name.equals("mealy")) {
-//            Mealy linguagemAtual = (Mealy) linguagem;
-////            linguagemConvertida = linguagemAtual.converteMoore();
-//        } else if (idMaq.name.equals("moore")) {
-//            Moore linguagemAtual = (Moore) linguagem;
-//            linguagemConvertida = linguagemAtual.converteMealy();
-//        }
+        // Escolho a máquina, realizo a conversão
+        Linguagem linguagemConvertida = null;
+        if (idMaq.name.equals("mealy")) {
+            Mealy linguagemAtual = (Mealy) linguagem;
+            linguagemConvertida = linguagemAtual.toMoore();
+        } else if (idMaq.name.equals("moore")) {
+            Moore linguagemAtual = (Moore) linguagem;
+            linguagemConvertida = linguagemAtual.toMealy();
+        }
 
-        // Imprimo as máquinas
-        System.out.println("Linguagem atual:");
-        System.out.println(linguagem.toString());
-
-//        System.out.println("\n\n");
-//        System.out.println("Linguagem convertida:");
-//        System.out.println(linguagemConvertida.toString());
+        BufferedWriter out = new BufferedWriter(new FileWriter(MEALY_SAIDA_1));
+        out.write(linguagemConvertida.gerarArquivo());
+        out.close();
     }
 
     private static ArrayList<String> object2array(Object x) {
