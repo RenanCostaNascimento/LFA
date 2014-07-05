@@ -6,7 +6,9 @@
 package linguagem;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -14,21 +16,21 @@ import java.util.List;
  */
 public abstract class Linguagem {
 
-    protected List<String> alfabetoEntrada;
-    protected List<String> alfabetoSaida;
-    protected List<String> conjuntoEstados;
+    protected Set<String> alfabetoEntrada;
+    protected Set<String> alfabetoSaida;
+    protected Set<String> conjuntoEstados;
     protected String estadoInicial;
-    protected List<String> conjuntoEstadosFinais;
+    protected Set<String> conjuntoEstadosFinais;
     protected List<Transicao> funcaoTransicao;
-    protected List<FuncaoSaida> funcaoSaidas;
+    protected Set<FuncaoSaida> funcaoSaidas;
 
     public Linguagem() {
-        this.alfabetoEntrada = new ArrayList<>();
+        this.alfabetoEntrada = new HashSet<>();
         this.funcaoTransicao = new ArrayList();
-        this.alfabetoSaida = new ArrayList<>();
-        this.conjuntoEstados = new ArrayList<>();
-        this.conjuntoEstadosFinais = new ArrayList<>();
-        this.funcaoSaidas = new ArrayList<>();
+        this.alfabetoSaida = new HashSet<>();
+        this.conjuntoEstados = new HashSet<>();
+        this.conjuntoEstadosFinais = new HashSet<>();
+        this.funcaoSaidas = new HashSet<>();
     }
 
     public List<Transicao> getFuncaoTransicao() {
@@ -39,11 +41,11 @@ public abstract class Linguagem {
         this.funcaoTransicao = funcaoTransicao;
     }
 
-    public List<FuncaoSaida> getFuncaoSaidas() {
+    public Set<FuncaoSaida> getFuncaoSaidas() {
         return funcaoSaidas;
     }
 
-    public void setFuncaoSaidas(List<FuncaoSaida> funcaoSaidas) {
+    public void setFuncaoSaidas(Set<FuncaoSaida> funcaoSaidas) {
         this.funcaoSaidas = funcaoSaidas;
     }
     
@@ -71,27 +73,27 @@ public abstract class Linguagem {
         this.funcaoTransicao.add(transicao);
     }
 
-    public List<String> getAlfabetoEntrada() {
+    public Set<String> getAlfabetoEntrada() {
         return alfabetoEntrada;
     }
 
-    public void setAlfabetoEntrada(List<String> alfabetoEntrada) {
+    public void setAlfabetoEntrada(Set<String> alfabetoEntrada) {
         this.alfabetoEntrada = alfabetoEntrada;
     }
 
-    public List<String> getAlfabetoSaida() {
+    public Set<String> getAlfabetoSaida() {
         return alfabetoSaida;
     }
 
-    public void setAlfabetoSaida(List<String> alfabetoSaida) {
+    public void setAlfabetoSaida(Set<String> alfabetoSaida) {
         this.alfabetoSaida = alfabetoSaida;
     }
 
-    public List<String> getConjuntoEstados() {
+    public Set<String> getConjuntoEstados() {
         return conjuntoEstados;
     }
 
-    public void setConjuntoEstados(List<String> conjuntoEstados) {
+    public void setConjuntoEstados(Set<String> conjuntoEstados) {
         this.conjuntoEstados = conjuntoEstados;
     }
 
@@ -103,12 +105,21 @@ public abstract class Linguagem {
         this.estadoInicial = estadoInicial;
     }
 
-    public List<String> getConjuntoEstadosFinais() {
+    public Set<String> getConjuntoEstadosFinais() {
         return conjuntoEstadosFinais;
     }
 
-    public void setConjuntoEstadosFinais(List<String> conjuntoEstadosFinais) {
+    public void setConjuntoEstadosFinais(Set<String> conjuntoEstadosFinais) {
         this.conjuntoEstadosFinais = conjuntoEstadosFinais;
+    }
+    
+    public String getSimboloGerado(String estado){
+        for(FuncaoSaida funcaoSaida : funcaoSaidas){
+            if(estado.equals(funcaoSaida.getEstado())){
+                return funcaoSaida.getSimboloGerado();
+            }
+        }
+        return null;
     }
 
     public String toString() {
@@ -137,6 +148,10 @@ public abstract class Linguagem {
                 builder.append(" e gera " + transicao.getSimboloGerado());
             }
             builder.append("\n");
+        }
+        builder.append("Função de saida\n");
+        for(FuncaoSaida funcaoSaida : funcaoSaidas){
+            builder.append(funcaoSaida.getEstado() + " - " + funcaoSaida.getSimboloGerado() + "\n");
         }
         
         return builder.toString();

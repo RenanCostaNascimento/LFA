@@ -113,13 +113,11 @@ public class MealyMoore {
 
                     }
                 } else if (id.name.equals("out-fn")) {
-                    System.out.println("Função de saída:");
                     for (int j = 1; j < l.size(); j += 1) {
                         x = l.get(j);
                         ArrayList<String> array = object2array(x);
-                        System.out.println(array.get(0));
                         String funcaoSaidaStr = array.get(0);
-                        String estado = funcaoSaidaStr.substring(2, 4);
+                        String estado = funcaoSaidaStr.substring(1, 3);
                         String simboloGerado = funcaoSaidaStr.substring(5, 6);
                         FuncaoSaida funcaoSaida;
                         if (simboloGerado.equals("[")) {
@@ -135,6 +133,7 @@ public class MealyMoore {
                 }
             }
         }
+        
 
         // Escolho a máquina, realizo a conversão
         Linguagem linguagemConvertida = null;
@@ -145,6 +144,8 @@ public class MealyMoore {
             Moore linguagemAtual = (Moore) linguagem;
             linguagemConvertida = linguagemAtual.toMealy();
         }
+        
+        //System.out.println(linguagemConvertida.toString());
 
         BufferedWriter out = new BufferedWriter(new FileWriter(MEALY_SAIDA_1));
         out.write(linguagemConvertida.gerarArquivo());

@@ -5,6 +5,9 @@
  */
 package linguagem;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author T
@@ -20,20 +23,84 @@ public class Mealy extends Linguagem {
     @Override
     public Linguagem toMoore() {
         Moore moore = new Moore();
+
         moore.setAlfabetoEntrada(alfabetoEntrada);
         moore.setAlfabetoSaida(alfabetoSaida);
-        moore.setConjuntoEstados(conjuntoEstados);
-        moore.setEstadoInicial(estadoInicial);
-        moore.setConjuntoEstadosFinais(conjuntoEstadosFinais);
-        for (Transicao transicao : funcaoTransicao) {
-            Transicao transicaoMoore = new Transicao(transicao.getEstadoOrigem(), transicao.getSimboloTransicao(), transicao.getEstadoDestino());
-            moore.addFuncaoTransicao(transicao);
-            FuncaoSaida funcaoSaida = new FuncaoSaida(transicao.getEstadoOrigem(), transicao.getSimboloGerado());
-            moore.addFuncaoSaida(funcaoSaida);            
-        }
-        
+        gerarNovosEstados(moore);
+        gerarEstadoInicial(moore);
+        gerarEstadosFinais(moore);
+        gerarTransicoes(moore);
+
         return moore;
     }
 
+    private void gerarNovosEstados(Moore moore) {
+        Map<String, String> estadoSimbolo = new HashMap<>();
+        for (Transicao transicao : funcaoTransicao) {
+            String novoEstado = transicao.getEstadoDestino();
+            //se o novo estado não estiver mapeado
+            if (!estadoSimbolo.containsKey(novoEstado)) {
+                //mapear estado-simbolo
+                estadoSimbolo.put(novoEstado, transicao.getSimboloGerado());
+            } else {
+                //se o estado existir
+                while (estadoSimbolo.get(novoEstado) != null) {
+                    //verificar se o simbolo que eu quero inserir já existe para o estado
+                    if (!estadoSimbolo.get(novoEstado).equals(transicao.getSimboloGerado())) {
+                        //gerar variação do novo estado
+                        novoEstado += "*";
+                    } else {
+                        break;
+                    }
+                }
+                estadoSimbolo.put(novoEstado, transicao.getSimboloGerado());
+            }
+        }
+        for (Map.Entry<String, String> entry : estadoSimbolo.entrySet()) {
+            moore.addConjuntoEstados(entry.getKey());
+            FuncaoSaida funcaoSaida = new FuncaoSaida(entry.getKey(), entry.getValue());
+            moore.addFuncaoSaida(funcaoSaida);
+        }
+    }
+
+    private void gerarEstadoInicial(Moore moore) {
+        if (moore.getConjuntoEstados().contains("q0*")) {
+            moore.setEstadoInicial("qi");
+            moore.addConjuntoEstados("qi");
+        } else {
+            moore.setEstadoInicial("q0");
+        }
+
+    }
+
+    private void gerarTransicoes(Moore moore) {
+
+    }
+
+    private void gerarEstadosFinais(Moore moore) {
+        for (String estadoFinal : conjuntoEstadosFinais) {
+
+            while (moore.getConjuntoEstados().contains(estadoFinal)) {
+                moore.addConjuntoEstadosFinais(estadoFinal);
+                estadoFinal += "*";
+            }
+        }
+    }
+
+    public String gerarArquivo() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("( mealy\n");
+        builder.append(super.gerarArquivo());
+        for (Transicao transicao : funcaoTransicao) {
+            if(getSimboloGerado(transicao.getEstadoOrigem()).equals("$")){
+                builder.append("( " + transicao.getEstadoOrigem() + " " + transicao.getEstadoDestino() + " " + transicao.getSimboloTransicao() + " ( ) ) ");
+            }else{
+                builder.append("( " + transicao.getEstadoOrigem() + " " + transicao.getEstadoDestino() + " " + transicao.getSimboloTransicao() + " " + getSimboloGerado(transicao.getEstadoOrigem()) + " ) ");
+            }
+            
+        }
+        builder.append(") )");
+        return builder.toString();
+    }
 
 }
