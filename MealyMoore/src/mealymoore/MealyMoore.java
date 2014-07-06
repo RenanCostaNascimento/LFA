@@ -45,7 +45,7 @@ public class MealyMoore {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
         assert (args.length == 1);
-        FileReader rd = new FileReader(MEALY_ENTRADA_2);
+        FileReader rd = new FileReader(MEALY_ENTRADA_1);
 
         Lexer lex = new Lexer(rd);
         Parser parser = new Parser(lex);
@@ -147,7 +147,7 @@ public class MealyMoore {
         
         //System.out.println(linguagemConvertida.toString());
 
-        BufferedWriter out = new BufferedWriter(new FileWriter(MEALY_SAIDA_2));
+        BufferedWriter out = new BufferedWriter(new FileWriter(MEALY_SAIDA_1));
         out.write(linguagemConvertida.gerarArquivo());
         out.close();
     }

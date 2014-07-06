@@ -5,7 +5,9 @@
  */
 package linguagem;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,6 +31,33 @@ public abstract class Linguagem {
         this.conjuntoEstados = new HashSet<>();
         this.conjuntoEstadosFinais = new HashSet<>();
         this.funcaoSaidas = new HashSet<>();
+    }
+    
+    public List<String> getVariacoesDeUmEstado(String estado){
+        List<String> list = new ArrayList<>();
+        for(String estadoConjunto : conjuntoEstados){
+//            System.out.println(estadoConjunto);
+            if(estadoConjunto.equals(estado) || estadoConjunto.startsWith(estado)){
+                list.add(estadoConjunto);
+            }
+        }
+        return list;
+    }
+    
+    /**
+     * Retorna todas as variações de um estado que geram um símbolo específico. Ex: passando q1, retorna q1, q1*, q**... que gerem o símbolo passado.
+     * @param estado estado que ser quer as variações
+     * @param simbolo símbolo que o estado gera
+     * @return o conjunto de variações de estado que geram o símbolo passado
+     */
+    public List<String> getVariacoesEstadoSimbolo(String estado, String simbolo){
+        List<String> list = new ArrayList<>();
+        for(FuncaoSaida funcaoSaida : funcaoSaidas){
+            if(funcaoSaida.getEstado().startsWith(estado) && funcaoSaida.getSimboloGerado().equals(simbolo)){
+                list.add(funcaoSaida.getEstado());
+            }
+        }
+        return list;
     }
     
     public boolean contemEstadoFuncaoSaida(String estado){

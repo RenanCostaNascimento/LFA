@@ -6,6 +6,7 @@
 package linguagem;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,7 +64,7 @@ public class Mealy extends Linguagem {
             moore.addFuncaoSaida(funcaoSaida);
         }
         //adicionando o estado q0 ao conjunto, caso ele não tenha sido adicionado.
-        moore.addConjuntoEstados("qo");
+        moore.addConjuntoEstados("q0");
     }
 
     private void gerarEstadoInicial(Moore moore) {
@@ -84,22 +85,33 @@ public class Mealy extends Linguagem {
 
     private void gerarTransicoes(Moore moore) {
         for (Transicao transicao : funcaoTransicao) {
-            for (FuncaoSaida funcaoSaida : funcaoSaidas) {
-                //verifica se existe alguma transição para o estado
-                if (transicao.getEstadoDestino().equals(estadoOriginal(funcaoSaida.getEstado()))) {
-                    String estadoTransicaoDestino = estadoOriginal(funcaoSaida.getEstado());
-                    //verifica se o estado recebe alguma transição
-                    while (contemEstadoFuncaoSaida(estadoTransicaoDestino)) {
-                        //verifica se está fazendo uma transição para o novo estado, gerando o símbolo correto.
-                        if (transicao.getSimboloGerado().equals(funcaoSaida.getSimboloGerado())) {
-                            Transicao novaTransicao = new Transicao(transicao.getEstadoOrigem(), transicao.getSimboloTransicao(), estadoTransicaoDestino);
-                            moore.addFuncaoTransicao(novaTransicao);
-                        }
-                        estadoTransicaoDestino += "*";
-                    }
+            List<String> estadosOrigemPossiveis = moore.getVariacoesDeUmEstado(transicao.getEstadoOrigem());
+            List<String> estadosDestinoPossiveis = getVariacoesEstadoSimbolo(transicao.getEstadoDestino(), transicao.getSimboloGerado());
+            for (String estadoOrigem : estadosOrigemPossiveis) {
+                for (String estadoDestino : estadosDestinoPossiveis) {
+                    Transicao novaTransicao = new Transicao(estadoOrigem, transicao.getSimboloTransicao(), estadoDestino);
+                    moore.addFuncaoTransicao(novaTransicao);
                 }
             }
         }
+
+//        for (Transicao transicao : funcaoTransicao) {
+//            for (FuncaoSaida funcaoSaida : funcaoSaidas) {
+//                //verifica se existe alguma transição para o estado
+//                if (transicao.getEstadoDestino().equals(estadoOriginal(funcaoSaida.getEstado()))) {
+//                    String estadoTransicaoDestino = estadoOriginal(funcaoSaida.getEstado());
+//                    //verifica se o estado recebe alguma transição
+//                    while (contemEstadoFuncaoSaida(estadoTransicaoDestino)) {
+//                        //verifica se está fazendo uma transição para o novo estado, gerando o símbolo correto.
+//                        if (transicao.getSimboloGerado().equals(getSimboloGerado(estadoTransicaoDestino))) {
+//                            Transicao novaTransicao = new Transicao(transicao.getEstadoOrigem(), transicao.getSimboloTransicao(), estadoTransicaoDestino);
+//                            moore.addFuncaoTransicao(novaTransicao);
+//                        }
+//                        estadoTransicaoDestino += "*";
+//                    }
+//                }
+//            }
+//        }
     }
 
     private String estadoOriginal(String estado) {
