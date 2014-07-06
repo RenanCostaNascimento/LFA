@@ -64,7 +64,10 @@ public class Mealy extends Linguagem {
             moore.addFuncaoSaida(funcaoSaida);
         }
         //adicionando o estado q0 ao conjunto, caso ele não tenha sido adicionado.
-        moore.addConjuntoEstados("q0");
+//        List<String> listaQ0 = getVariacoesDeUmEstado("q0");
+//        for(String estadoQ0 : listaQ0){
+            moore.addConjuntoEstados("q0");
+//        }
     }
 
     private void gerarEstadoInicial(Moore moore) {

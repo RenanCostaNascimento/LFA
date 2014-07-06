@@ -101,26 +101,29 @@ public class MealyMoore {
                         x = l.get(j);
                         ArrayList<String> array = object2array(x);
                         String funcaoTransicao = array.get(0);
-                        String estadoOrigem = funcaoTransicao.substring(1, 3);
-                        String estadoDestino = funcaoTransicao.substring(5, 7);
-                        String simboloTransicao = funcaoTransicao.substring(9, 10);
+                        String funcaoTransicaoSemColchete = funcaoTransicao.substring(1, funcaoTransicao.length()-1);
+                        String[] elementosTransicao = funcaoTransicaoSemColchete.split(", ");
+                        String estadoOrigem = elementosTransicao[0];
+                        String estadoDestino = elementosTransicao[1];
+                        String simboloTransicao = elementosTransicao[2];
                         Transicao transicao = new Transicao(estadoOrigem, simboloTransicao, estadoDestino);
                         if (idMaq.name.equals("mealy")) {
-                            String simboloGerado = funcaoTransicao.substring(12, 13);
+                            String simboloGerado = elementosTransicao[3];
                             transicao.setSimboloGerado(simboloGerado);
                         }
                         linguagem.addFuncaoTransicao(transicao);
-
                     }
                 } else if (id.name.equals("out-fn")) {
                     for (int j = 1; j < l.size(); j += 1) {
                         x = l.get(j);
                         ArrayList<String> array = object2array(x);
                         String funcaoSaidaStr = array.get(0);
-                        String estado = funcaoSaidaStr.substring(1, 3);
-                        String simboloGerado = funcaoSaidaStr.substring(5, 6);
+                        String funcaoSaidaSemColchete = funcaoSaidaStr.substring(1, funcaoSaidaStr.length()-1);
+                        String[] elementosSaida = funcaoSaidaSemColchete.split(", ");
+                        String estado = elementosSaida[0];
+                        String simboloGerado = elementosSaida[1];
                         FuncaoSaida funcaoSaida;
-                        if (simboloGerado.equals("[")) {
+                        if (simboloGerado.equals("[]")) {
                             funcaoSaida = new FuncaoSaida(estado, "$");
                         } else {
                             funcaoSaida = new FuncaoSaida(estado, simboloGerado);

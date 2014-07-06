@@ -1,0 +1,10 @@
+( moore
+( symbols-in a b )
+( symbols-out a b )
+( states p0 p0* q0 )
+( start q0 )
+( finals p0 p0* )
+( trans
+( q0 q0 a ) ( p0* q0 a ) ( p0 p0 b ) ( p0 q0 a ) ( p0* p0 b ) ( q0 p0* b ) 
+( out-fn
+( p0* b ) ( p0 [] ) ( q0 ( ) ) ( q0 a ) ) )
