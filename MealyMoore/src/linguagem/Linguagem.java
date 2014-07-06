@@ -5,9 +5,7 @@
  */
 package linguagem;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,23 +19,41 @@ public abstract class Linguagem {
     protected Set<String> conjuntoEstados;
     protected String estadoInicial;
     protected Set<String> conjuntoEstadosFinais;
-    protected List<Transicao> funcaoTransicao;
+    protected Set<Transicao> funcaoTransicao;
     protected Set<FuncaoSaida> funcaoSaidas;
 
     public Linguagem() {
         this.alfabetoEntrada = new HashSet<>();
-        this.funcaoTransicao = new ArrayList();
+        this.funcaoTransicao = new HashSet();
         this.alfabetoSaida = new HashSet<>();
         this.conjuntoEstados = new HashSet<>();
         this.conjuntoEstadosFinais = new HashSet<>();
         this.funcaoSaidas = new HashSet<>();
     }
+    
+    public boolean contemEstadoFuncaoSaida(String estado){
+        for(FuncaoSaida funcaoSaida : funcaoSaidas){
+            if(estado.equals(funcaoSaida.getEstado())){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean existeTransicao(String estado, String simbolo){
+        for(Transicao transicao : funcaoTransicao){
+            if(transicao.getEstadoDestino().equals(estado) && transicao.getSimboloGerado().equals(simbolo)){
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public List<Transicao> getFuncaoTransicao() {
+    public Set<Transicao> getFuncaoTransicao() {
         return funcaoTransicao;
     }
 
-    public void setFuncaoTransicao(List<Transicao> funcaoTransicao) {
+    public void setFuncaoTransicao(Set<Transicao> funcaoTransicao) {
         this.funcaoTransicao = funcaoTransicao;
     }
 
@@ -180,7 +196,7 @@ public abstract class Linguagem {
         for(String estado : conjuntoEstados){
             builder.append(estado + " ");
         }
-        builder.append(")\n( start " + estadoInicial + ")\n");
+        builder.append(")\n( start " + estadoInicial + " )\n");
         builder.append("( finals ");
         for(String estado : conjuntoEstadosFinais){
             builder.append(estado + " ");

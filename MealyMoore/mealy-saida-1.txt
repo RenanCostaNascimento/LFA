@@ -2,9 +2,9 @@
 ( symbols-in a b )
 ( symbols-out 0 1 )
 ( states q1 q2 q3 q3* q0 )
-( start q0)
+( start q0 )
 ( finals q3 q3* )
 ( trans
-
+( q2 q3* a ) ( q1 q2 b ) ( q0 q1 a ) ( q0 q3* b ) ( q2 q3 a ) ( q0 q3 b ) ( q3 q0 b ) 
 ( out-fn
-( q2 1 ) ( q0 1 ) ( q3* 1 ) ( q3 0 ) ( q1 0 ) ) )
+( q1 0 ) ( q0 1 ) ( q2 1 ) ( q3* 1 ) ( q3 0 ) ) )

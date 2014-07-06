@@ -26,6 +26,7 @@ public class Mealy extends Linguagem {
 
         moore.setAlfabetoEntrada(alfabetoEntrada);
         moore.setAlfabetoSaida(alfabetoSaida);
+        moore.setFuncaoSaidas(funcaoSaidas);
         gerarNovosEstados(moore);
         gerarEstadoInicial(moore);
         gerarEstadosFinais(moore);
@@ -61,20 +62,48 @@ public class Mealy extends Linguagem {
             FuncaoSaida funcaoSaida = new FuncaoSaida(entry.getKey(), entry.getValue());
             moore.addFuncaoSaida(funcaoSaida);
         }
+        //adicionando o estado q0 ao conjunto, caso ele não tenha sido adicionado.
+        moore.addConjuntoEstados("qo");
     }
 
     private void gerarEstadoInicial(Moore moore) {
         if (moore.getConjuntoEstados().contains("q0*")) {
             moore.setEstadoInicial("qi");
             moore.addConjuntoEstados("qi");
+            //não há transições para q0, portanto é preciso adicionar um qo/$
+            FuncaoSaida funcaoSaida = new FuncaoSaida("qi", "$");
+            moore.addFuncaoSaida(funcaoSaida);
         } else {
             moore.setEstadoInicial("q0");
+            //não há transições para q0, portanto é preciso adicionar um qo/$
+            FuncaoSaida funcaoSaida = new FuncaoSaida("q0", "$");
+            moore.addFuncaoSaida(funcaoSaida);
         }
 
     }
 
     private void gerarTransicoes(Moore moore) {
+        for (Transicao transicao : funcaoTransicao) {
+            for (FuncaoSaida funcaoSaida : funcaoSaidas) {
+                //verifica se existe alguma transição para o estado
+                if (transicao.getEstadoDestino().equals(estadoOriginal(funcaoSaida.getEstado()))) {
+                    String estadoTransicaoDestino = estadoOriginal(funcaoSaida.getEstado());
+                    //verifica se o estado recebe alguma transição
+                    while (contemEstadoFuncaoSaida(estadoTransicaoDestino)) {
+                        //verifica se está fazendo uma transição para o novo estado, gerando o símbolo correto.
+                        if (transicao.getSimboloGerado().equals(funcaoSaida.getSimboloGerado())) {
+                            Transicao novaTransicao = new Transicao(transicao.getEstadoOrigem(), transicao.getSimboloTransicao(), estadoTransicaoDestino);
+                            moore.addFuncaoTransicao(novaTransicao);
+                        }
+                        estadoTransicaoDestino += "*";
+                    }
+                }
+            }
+        }
+    }
 
+    private String estadoOriginal(String estado) {
+        return estado.substring(0, 2);
     }
 
     private void gerarEstadosFinais(Moore moore) {
@@ -92,12 +121,12 @@ public class Mealy extends Linguagem {
         builder.append("( mealy\n");
         builder.append(super.gerarArquivo());
         for (Transicao transicao : funcaoTransicao) {
-            if(getSimboloGerado(transicao.getEstadoOrigem()).equals("$")){
+            if (getSimboloGerado(transicao.getEstadoOrigem()).equals("$")) {
                 builder.append("( " + transicao.getEstadoOrigem() + " " + transicao.getEstadoDestino() + " " + transicao.getSimboloTransicao() + " ( ) ) ");
-            }else{
+            } else {
                 builder.append("( " + transicao.getEstadoOrigem() + " " + transicao.getEstadoDestino() + " " + transicao.getSimboloTransicao() + " " + getSimboloGerado(transicao.getEstadoOrigem()) + " ) ");
             }
-            
+
         }
         builder.append(") )");
         return builder.toString();

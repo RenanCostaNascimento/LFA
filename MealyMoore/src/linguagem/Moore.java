@@ -46,7 +46,7 @@ public class Moore extends Linguagem {
         builder.append("\n( out-fn\n");
         for (FuncaoSaida funcaoSaida : funcaoSaidas) {
             if (funcaoSaida.getSimboloGerado().equals("$")) {
-                builder.append("( " + funcaoSaida.getEstado()+ " ( ) )");
+                builder.append("( " + funcaoSaida.getEstado()+ " ( ) ) ");
             } else {
                 builder.append("( " + funcaoSaida.getEstado() + " " + funcaoSaida.getSimboloGerado() + " ) ");
             }
