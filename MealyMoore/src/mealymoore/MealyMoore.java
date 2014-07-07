@@ -26,26 +26,45 @@ import linguagem.Transicao;
  * @author Renan
  */
 public class MealyMoore {
-    
-    // Possiveis arquivos de entrada.
-    private static final String MOORE_ENTRADA_1 = "moore-entrada-1.txt";
-    private static final String MOORE_ENTRADA_2 = "moore-entrada-2.txt";
-    private static final String MOORE_ENTRADA_3 = "moore-entrada-3.txt";
-    private static final String MEALY_ENTRADA_1 = "mealy-entrada-1.txt";
-    private static final String MEALY_ENTRADA_2 = "mealy-entrada-2.txt";
-    private static final String MEALY_ENTRADA_3 = "mealy-entrada-3.txt";
-    
-    // Possiveis arquivos de saida.
-    private static final String MOORE_SAIDA_1 = "moore-saida-1.txt";
-    private static final String MOORE_SAIDA_2 = "moore-saida-2.txt";
-    private static final String MOORE_SAIDA_3 = "moore-saida-3.txt";
-    private static final String MEALY_SAIDA_1 = "mealy-saida-1.txt";
-    private static final String MEALY_SAIDA_2 = "mealy-saida-2.txt";
-    private static final String MEALY_SAIDA_3 = "mealy-saida-3.txt";
+
+    // Transformações de MEALY para MOORE
+    // Arquivos de entrada
+    private static final String MEALY_MOORE_ENTRADA_1 = "mealy-moore-entrada-1.txt";
+    private static final String MEALY_MOORE_ENTRADA_2 = "mealy-moore-entrada-2.txt";
+    private static final String MEALY_MOORE_ENTRADA_3 = "mealy-moore-entrada-3.txt";
+    // Arquivos de saida
+    private static final String MEALY_MOORE_SAIDA_1 = "mealy-moore-saida-1.txt";
+    private static final String MEALY_MOORE_SAIDA_2 = "mealy-moore-saida-2.txt";
+    private static final String MEALY_MOORE_SAIDA_3 = "mealy-moore-saida-3.txt";
+
+    // Transformações de MOORE para MEALY 
+    // Arquivos de entrada
+    private static final String MOORE_MEALY_ENTRADA_1 = "moore-mealy-entrada-1.txt";
+    private static final String MOORE_MEALY_ENTRADA_2 = "moore-mealy-entrada-2.txt";
+    private static final String MOORE_MEALY_ENTRADA_3 = "moore-mealy-entrada-3.txt";
+    // Arquivos de saida
+    private static final String MOORE_MEALY_SAIDA_1 = "moore-mealy-saida-1.txt";
+    private static final String MOORE_MEALY_SAIDA_2 = "moore-mealy-saida-2.txt";
+    private static final String MOORE_MEALY_SAIDA_3 = "moore-mealy-saida-3.txt";
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        assert (args.length == 1);
-        FileReader rd = new FileReader(MEALY_ENTRADA_1);
+        Linguagem linguagem = criarLinguagem(MOORE_MEALY_ENTRADA_1);
+        escreverArquivoSaida(MOORE_MEALY_SAIDA_1, linguagem);
+
+    }
+
+    private static ArrayList<String> object2array(Object x) {
+        String texto = x.toString();
+        String[] vetor = texto.split(" ,");
+        ArrayList<String> array = new ArrayList<>();
+        for (int posicao = 0; posicao < vetor.length; posicao++) {
+            array.add(vetor[posicao]);
+        }
+        return array;
+    }
+
+    private static Linguagem criarLinguagem(String arquivoEntrada) throws FileNotFoundException, IOException {
+        FileReader rd = new FileReader(arquivoEntrada);
 
         Lexer lex = new Lexer(rd);
         Parser parser = new Parser(lex);
@@ -101,7 +120,7 @@ public class MealyMoore {
                         x = l.get(j);
                         ArrayList<String> array = object2array(x);
                         String funcaoTransicao = array.get(0);
-                        String funcaoTransicaoSemColchete = funcaoTransicao.substring(1, funcaoTransicao.length()-1);
+                        String funcaoTransicaoSemColchete = funcaoTransicao.substring(1, funcaoTransicao.length() - 1);
                         String[] elementosTransicao = funcaoTransicaoSemColchete.split(", ");
                         String estadoOrigem = elementosTransicao[0];
                         String estadoDestino = elementosTransicao[1];
@@ -118,7 +137,7 @@ public class MealyMoore {
                         x = l.get(j);
                         ArrayList<String> array = object2array(x);
                         String funcaoSaidaStr = array.get(0);
-                        String funcaoSaidaSemColchete = funcaoSaidaStr.substring(1, funcaoSaidaStr.length()-1);
+                        String funcaoSaidaSemColchete = funcaoSaidaStr.substring(1, funcaoSaidaStr.length() - 1);
                         String[] elementosSaida = funcaoSaidaSemColchete.split(", ");
                         String estado = elementosSaida[0];
                         String simboloGerado = elementosSaida[1];
@@ -136,8 +155,6 @@ public class MealyMoore {
                 }
             }
         }
-        
-
         // Escolho a máquina, realizo a conversão
         Linguagem linguagemConvertida = null;
         if (idMaq.name.equals("mealy")) {
@@ -147,22 +164,13 @@ public class MealyMoore {
             Moore linguagemAtual = (Moore) linguagem;
             linguagemConvertida = linguagemAtual.toMealy();
         }
-        
-        //System.out.println(linguagemConvertida.toString());
-
-        BufferedWriter out = new BufferedWriter(new FileWriter(MEALY_SAIDA_1));
-        out.write(linguagemConvertida.gerarArquivo());
-        out.close();
+        return linguagemConvertida;
     }
 
-    private static ArrayList<String> object2array(Object x) {
-        String texto = x.toString();
-        String[] vetor = texto.split(" ,");
-        ArrayList<String> array = new ArrayList<>();
-        for (int posicao = 0; posicao < vetor.length; posicao++) {
-            array.add(vetor[posicao]);
-        }
-        return array;
+    private static void escreverArquivoSaida(String nomeArquivoSaida, Linguagem linguagemConvertida) throws IOException {
+        BufferedWriter out = new BufferedWriter(new FileWriter(nomeArquivoSaida));
+        out.write(linguagemConvertida.gerarArquivo());
+        out.close();
     }
 
 }

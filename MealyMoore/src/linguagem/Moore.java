@@ -5,9 +5,6 @@
  */
 package linguagem;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author T
@@ -64,7 +61,8 @@ public class Moore extends Linguagem {
         mealy.setEstadoInicial(estadoInicial);
         mealy.setConjuntoEstadosFinais(conjuntoEstadosFinais);
         for (Transicao transicao : funcaoTransicao) {
-            Transicao transicaoMoore = new Transicao(transicao.getEstadoOrigem(), transicao.getSimboloTransicao(), transicao.getEstadoDestino());
+            Transicao transicaoMealy = new Transicao(transicao.getEstadoOrigem(), transicao.getSimboloTransicao(), transicao.getEstadoDestino());
+//            transicaoMealy.setSimboloGerado(getSimboloGerado(transicao.getEstadoDestino()));
             mealy.addFuncaoTransicao(transicao);
             FuncaoSaida funcaoSaida = new FuncaoSaida(transicao.getEstadoOrigem(), transicao.getSimboloGerado());
             mealy.addFuncaoSaida(funcaoSaida);            
@@ -79,32 +77,4 @@ public class Moore extends Linguagem {
         System.out.println("Ja sou Moore!");
         return null;
     }
-
-//    private void gerarNovosEstados(Mealy mealy) {
-//        Map<String, String> estadoSimbolo = new HashMap<>();
-//        for (Transicao transicao : funcaoTransicao) {
-//            String novoEstado = transicao.getEstadoDestino();
-//            //se o novo estado não estiver mapeado
-//            if (!estadoSimbolo.containsKey(novoEstado)) {
-//                //mapear estado-simbolo
-//                estadoSimbolo.put(novoEstado, transicao.getSimboloGerado());
-//            } else {
-//                //se o estado existir
-//                while (estadoSimbolo.get(novoEstado) != null) {
-//                    //verificar se o simbolo que eu quero inserir já existe para o estado
-//                    if (!estadoSimbolo.get(novoEstado).equals(transicao.getSimboloGerado())) {
-//                        //gerar variação do novo estado
-//                        novoEstado += "*";
-//                    } else {
-//                        break;
-//                    }
-//                }
-//                estadoSimbolo.put(novoEstado, transicao.getSimboloGerado());
-//            }
-//        }
-//        for (Map.Entry<String, String> entry : estadoSimbolo.entrySet()) {
-//            System.out.println(entry.getKey() + " " + entry.getValue());
-//        }
-//    }
-
 }

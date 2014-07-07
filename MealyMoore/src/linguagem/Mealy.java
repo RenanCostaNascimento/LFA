@@ -80,8 +80,8 @@ public class Mealy extends Linguagem {
         } else {
             moore.setEstadoInicial("q0");
             //não há transições para q0, portanto é preciso adicionar um qo/$
-            FuncaoSaida funcaoSaida = new FuncaoSaida("q0", "$");
-            moore.addFuncaoSaida(funcaoSaida);
+//            FuncaoSaida funcaoSaida = new FuncaoSaida("q0", "$");
+//            moore.addFuncaoSaida(funcaoSaida);
         }
 
     }
@@ -97,24 +97,6 @@ public class Mealy extends Linguagem {
                 }
             }
         }
-
-//        for (Transicao transicao : funcaoTransicao) {
-//            for (FuncaoSaida funcaoSaida : funcaoSaidas) {
-//                //verifica se existe alguma transição para o estado
-//                if (transicao.getEstadoDestino().equals(estadoOriginal(funcaoSaida.getEstado()))) {
-//                    String estadoTransicaoDestino = estadoOriginal(funcaoSaida.getEstado());
-//                    //verifica se o estado recebe alguma transição
-//                    while (contemEstadoFuncaoSaida(estadoTransicaoDestino)) {
-//                        //verifica se está fazendo uma transição para o novo estado, gerando o símbolo correto.
-//                        if (transicao.getSimboloGerado().equals(getSimboloGerado(estadoTransicaoDestino))) {
-//                            Transicao novaTransicao = new Transicao(transicao.getEstadoOrigem(), transicao.getSimboloTransicao(), estadoTransicaoDestino);
-//                            moore.addFuncaoTransicao(novaTransicao);
-//                        }
-//                        estadoTransicaoDestino += "*";
-//                    }
-//                }
-//            }
-//        }
     }
 
     private String estadoOriginal(String estado) {
@@ -136,10 +118,10 @@ public class Mealy extends Linguagem {
         builder.append("( mealy\n");
         builder.append(super.gerarArquivo());
         for (Transicao transicao : funcaoTransicao) {
-            if (getSimboloGerado(transicao.getEstadoOrigem()).equals("$")) {
+            if (getSimboloGerado(transicao.getEstadoDestino()).equals("$")) {
                 builder.append("( " + transicao.getEstadoOrigem() + " " + transicao.getEstadoDestino() + " " + transicao.getSimboloTransicao() + " ( ) ) ");
             } else {
-                builder.append("( " + transicao.getEstadoOrigem() + " " + transicao.getEstadoDestino() + " " + transicao.getSimboloTransicao() + " " + getSimboloGerado(transicao.getEstadoOrigem()) + " ) ");
+                builder.append("( " + transicao.getEstadoOrigem() + " " + transicao.getEstadoDestino() + " " + transicao.getSimboloTransicao() + " " + getSimboloGerado(transicao.getEstadoDestino()) + " ) ");
             }
 
         }
