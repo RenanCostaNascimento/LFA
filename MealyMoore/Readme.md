@@ -26,10 +26,15 @@ Modo de Uso:
 O código funciona da seguinte maneira:
 
 1 -> Realiza a leitura de um arquivo texto
+
 2 -> Faz a verificação se o arquivo gera uma linguagem mealy ou moore
+
 3 -> Sendo mealy, manda a linguagem para a classe Mealy e converte para a liguagem Moore
+
 4 -> Sendo moore, manda a linguagem para a classe Moore e converte para a linguagem Mealy
+
 5 -> Não sendo nenhum dos casos, gera uma exceção
+
 6 -> Caso seja gerado uma linguagem baseado na conversão do arquivo de entrada, recupera essa linguagem e a insere no arquivo de saída indicado inicialmente.
 
 ### Outras informações
